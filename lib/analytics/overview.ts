@@ -1,0 +1,102 @@
+import { prisma } from "@/lib/prisma";
+import type { AnalyticsQuery, AnalyticsResponse } from "./schemas";
+import { normalizeStores, resolveDateRange } from "./utils";
+
+export async function getOverviewAnalytics(query: AnalyticsQuery): Promise<AnalyticsResponse> {
+  const { start, end } = resolveDateRange(query);
+  const storeIds = normalizeStores(query.stores);
+
+  const [dailyMetrics, storeDaily] = await Promise.all([
+    prisma.overviewDailyMetrics.findMany({
+      where: {
+        businessDate: { gte: start, lte: end },
+        storeId: storeIds ? { in: storeIds } : undefined,
+      },
+    }),
+    prisma.salesStoreDaily.findMany({
+      where: {
+        businessDate: { gte: start, lte: end },
+        storeId: storeIds ? { in: storeIds } : undefined,
+      },
+      include: { store: true },
+    }),
+  ]);
+
+  const totals = dailyMetrics.reduce(
+    (acc, metric) => {
+      acc.gross += metric.grossAmount ?? 0;
+      acc.net += metric.netAmount ?? 0;
+      acc.sales += metric.salesCount ?? 0;
+      acc.covers += metric.coversCount ?? 0;
+      return acc;
+    },
+    { gross: 0, net: 0, sales: 0, covers: 0 }
+  );
+
+  const hoursMap = new Map<string, { sales: number; covers: number }>();
+  for (const metric of dailyMetrics) {
+    for (const slot of metric.timeSlotBreakdown ?? []) {
+      const bucket = hoursMap.get(slot.hour) ?? { sales: 0, covers: 0 };
+      bucket.sales += slot.sales ?? 0;
+      bucket.covers += slot.covers ?? 0;
+      hoursMap.set(slot.hour, bucket);
+    }
+  }
+
+  const sortedHours = Array.from(hoursMap.entries()).sort(([a], [b]) => a.localeCompare(b));
+
+  const chartSeries = sortedHours.length
+    ? [
+        {
+          name: "Vendite",
+          data: sortedHours.map(([hour, value]) => ({ x: hour, y: value.sales })),
+        },
+        {
+          name: "Coperti",
+          data: sortedHours.map(([hour, value]) => ({ x: hour, y: value.covers })),
+        },
+      ]
+    : [];
+
+  const tableRows: AnalyticsResponse["table"]["rows"] = [];
+  const tableColumns: AnalyticsResponse["table"]["columns"] = [
+    { key: "store", label: "Punto Vendita", align: "left" },
+    { key: "tipo_documento", label: "Tipo Documento", align: "left" },
+    { key: "numero_vendite", label: "N. Vendite", align: "right" },
+    { key: "venduto", label: "Venduto", align: "right" },
+  ];
+
+  for (const entry of storeDaily) {
+    const storeName = entry.store?.name ?? entry.storeId;
+    for (const doc of entry.documentBreakdown ?? []) {
+      tableRows.push({
+        store: storeName,
+        tipo_documento: doc.documentType,
+        numero_vendite: doc.salesCount ?? 0,
+        venduto: doc.grossAmount ?? 0,
+      });
+    }
+  }
+
+  const kpi = {
+    venduto: Number(totals.gross.toFixed(2)),
+    numero_vendite: totals.sales,
+    media_vendita: totals.sales ? Number((totals.gross / totals.sales).toFixed(2)) : 0,
+    venduto_coperto: Number(totals.net.toFixed(2)),
+    numero_coperti: totals.covers,
+    media_coperto: totals.covers ? Number((totals.gross / totals.covers).toFixed(2)) : 0,
+  } satisfies AnalyticsResponse["kpi"];
+
+  return {
+    kpi,
+    chart: {
+      series: chartSeries,
+      xLabel: "Ora",
+      yLabel: "Valore",
+    },
+    table: {
+      columns: tableColumns,
+      rows: tableRows,
+    },
+  };
+}

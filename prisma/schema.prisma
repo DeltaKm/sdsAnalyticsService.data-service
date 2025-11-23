@@ -1,0 +1,249 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client"
+  output   = "../app/generated/prisma"
+}
+
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
+}
+
+/// ------------
+/// Core domain
+/// ------------
+
+model Store {
+  id                     String                @id @default(auto()) @map("_id") @db.ObjectId
+  code                   String                @unique
+  name                   String
+  timezone               String                @default("Europe/Rome")
+  address                String?
+  city                   String?
+  region                 String?
+  createdAt              DateTime              @default(now())
+  updatedAt              DateTime              @updatedAt
+
+  operators              Operator[]
+  sales                  Sale[]
+  overviewDailyMetrics   OverviewDailyMetrics[]
+  overviewRollups        OverviewRollup[]
+  salesStoreDaily        SalesStoreDaily[]
+  salesOperatorDaily     SalesOperatorDaily[]
+  catalogItemDaily       CatalogItemDaily[]
+}
+
+model Channel {
+  id               String              @id @default(auto()) @map("_id") @db.ObjectId
+  code             String              @unique
+  name             String
+  description      String?
+  createdAt        DateTime            @default(now())
+  updatedAt        DateTime            @updatedAt
+
+  sales            Sale[]
+  salesChannelDaily SalesChannelDaily[]
+}
+
+model MenuItem {
+  id               String              @id @default(auto()) @map("_id") @db.ObjectId
+  sku              String              @unique
+  name             String
+  category         String?
+  price            Float
+  cost             Float?
+  isActive         Boolean             @default(true)
+  createdAt        DateTime            @default(now())
+  updatedAt        DateTime            @updatedAt
+
+  catalogItemDaily CatalogItemDaily[]
+}
+
+model Operator {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  code      String   @unique
+  fullName  String
+  role      String?
+  storeId   String?  @db.ObjectId
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  store     Store?   @relation(fields: [storeId], references: [id])
+  sales     Sale[]
+  salesDaily SalesOperatorDaily[]
+
+  @@index([storeId])
+}
+
+model Sale {
+  id             String        @id @default(auto()) @map("_id") @db.ObjectId
+  storeId        String        @db.ObjectId
+  channelId      String        @db.ObjectId
+  operatorId     String?       @db.ObjectId
+  businessDate   DateTime      @map("business_date")
+  timeSlot       String
+  grossAmount    Float
+  netAmount      Float
+  customersCount Int?
+  documentType   String
+  paymentMethods String[]
+  createdAt      DateTime      @default(now())
+  updatedAt      DateTime      @updatedAt
+  items          SaleItem[]
+
+  store          Store         @relation(fields: [storeId], references: [id])
+  channel        Channel       @relation(fields: [channelId], references: [id])
+  operator       Operator?     @relation(fields: [operatorId], references: [id])
+
+  @@index([storeId, businessDate])
+  @@index([businessDate, channelId])
+  @@index([businessDate, operatorId])
+}
+
+type SaleItem {
+  itemId     String?  @db.ObjectId
+  name       String
+  category   String?
+  quantity   Int
+  unitPrice  Float
+  totalPrice Float
+}
+
+/// -------------------
+/// Aggregated datasets
+/// -------------------
+
+model OverviewDailyMetrics {
+  id                String            @id @default(auto()) @map("_id") @db.ObjectId
+  storeId           String            @db.ObjectId
+  businessDate      DateTime          @map("business_date")
+  grossAmount       Float
+  netAmount         Float
+  salesCount        Int
+  avgTicket         Float
+  coversCount       Int
+  avgCover          Float
+  timeSlotBreakdown TimeSlotMetric[]  @map("time_slot_breakdown")
+  createdAt         DateTime          @default(now())
+  updatedAt         DateTime          @updatedAt
+
+  store             Store             @relation(fields: [storeId], references: [id])
+
+  @@unique([storeId, businessDate])
+  @@index([businessDate])
+  @@map("overview_daily_metrics")
+}
+
+type TimeSlotMetric {
+  hour   String
+  sales  Int
+  covers Int
+}
+
+enum OverviewRange {
+  LAST_7_DAYS
+  LAST_30_DAYS
+  LAST_90_DAYS
+  LIFETIME
+}
+
+model OverviewRollup {
+  id            String         @id @default(auto()) @map("_id") @db.ObjectId
+  storeId       String         @db.ObjectId
+  range         OverviewRange
+  referenceDate DateTime       @map("reference_date")
+  grossAmount   Float
+  netAmount     Float
+  salesCount    Int
+  avgTicket     Float
+  coversCount   Int
+  avgCover      Float
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
+
+  store         Store          @relation(fields: [storeId], references: [id])
+
+  @@unique([storeId, range, referenceDate])
+  @@map("overview_rollup")
+}
+
+model SalesStoreDaily {
+  id                 String               @id @default(auto()) @map("_id") @db.ObjectId
+  storeId            String               @db.ObjectId
+  businessDate       DateTime             @map("business_date")
+  salesCount         Int
+  grossAmount        Float
+  avgTicket          Float
+  documentBreakdown  DocumentBreakdown[]  @map("document_breakdown")
+  createdAt          DateTime             @default(now())
+  updatedAt          DateTime             @updatedAt
+
+  store              Store                @relation(fields: [storeId], references: [id])
+
+  @@unique([storeId, businessDate])
+  @@map("sales_store_daily")
+}
+
+type DocumentBreakdown {
+  documentType String
+  salesCount   Int
+  grossAmount  Float
+}
+
+model SalesChannelDaily {
+  id            String   @id @default(auto()) @map("_id") @db.ObjectId
+  channelId     String   @db.ObjectId
+  businessDate  DateTime @map("business_date")
+  salesCount    Int
+  grossAmount   Float
+  avgTicket     Float
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  channel       Channel  @relation(fields: [channelId], references: [id])
+
+  @@unique([channelId, businessDate])
+  @@map("sales_channel_daily")
+}
+
+model SalesOperatorDaily {
+  id            String    @id @default(auto()) @map("_id") @db.ObjectId
+  operatorId    String    @db.ObjectId
+  businessDate  DateTime  @map("business_date")
+  storeId       String?   @db.ObjectId
+  salesCount    Int
+  grossAmount   Float
+  avgTicket     Float
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  operator      Operator  @relation(fields: [operatorId], references: [id])
+  store         Store?    @relation(fields: [storeId], references: [id])
+
+  @@unique([operatorId, businessDate])
+  @@index([storeId])
+  @@map("sales_operator_daily")
+}
+
+model CatalogItemDaily {
+  id           String   @id @default(auto()) @map("_id") @db.ObjectId
+  itemId       String   @db.ObjectId
+  storeId      String?  @db.ObjectId
+  businessDate DateTime @map("business_date")
+  quantity     Int
+  grossAmount  Float
+  avgPrice     Float
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  item         MenuItem @relation(fields: [itemId], references: [id])
+  store        Store?   @relation(fields: [storeId], references: [id])
+
+  @@unique([itemId, storeId, businessDate])
+  @@map("catalog_item_daily")
+}

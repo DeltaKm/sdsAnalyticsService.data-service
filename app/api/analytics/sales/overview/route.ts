@@ -1,8 +1,15 @@
 import { NextResponse, type NextRequest } from "next/server";
 import { analyticsQuerySchema, analyticsResponseSchema } from "@/lib/analytics/schemas";
 import { getOverviewAnalytics } from "@/lib/analytics/overview";
+import { verifyEmbedToken } from "@/lib/embed/session";
 
 export async function GET(request: NextRequest) {
+  const authHeader = request.headers.get('authorization');
+  const claims = await verifyEmbedToken(authHeader ?? undefined);
+  if (!claims) {
+    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+  }
+
   const searchParams = request.nextUrl.searchParams;
 
   const query = {
@@ -12,6 +19,7 @@ export async function GET(request: NextRequest) {
       const values = searchParams.getAll("stores");
       return values.length ? values : undefined;
     })(),
+    uniqueKey: claims.uniqueKey,
   };
 
   const parsed = analyticsQuerySchema.safeParse(query);

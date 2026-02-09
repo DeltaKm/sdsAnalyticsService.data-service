@@ -22,6 +22,7 @@ model Store {
   id                     String                @id @default(auto()) @map("_id") @db.ObjectId
   code                   String                @unique
   name                   String
+  uniqueKey              String?
   timezone               String                @default("Europe/Rome")
   address                String?
   city                   String?
@@ -247,3 +248,4 @@ model CatalogItemDaily {
   @@unique([itemId, storeId, businessDate])
   @@map("catalog_item_daily")
 }
+

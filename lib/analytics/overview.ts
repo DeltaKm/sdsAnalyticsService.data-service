@@ -5,18 +5,37 @@ import { normalizeStores, resolveDateRange } from "./utils";
 export async function getOverviewAnalytics(query: AnalyticsQuery): Promise<AnalyticsResponse> {
   const { start, end } = resolveDateRange(query);
   const storeIds = normalizeStores(query.stores);
+  const { uniqueKey } = query;
+
+  // Filter by uniqueKey if provided
+  let filteredStoreIds = storeIds;
+  if (uniqueKey) {
+    const stores = await prisma.store.findMany({
+      where: { uniqueKey },
+      select: { id: true },
+    });
+    const uniqueKeyStoreIds = stores.map(s => s.id);
+    
+    // Intersect with explicit storeIds if provided
+    if (storeIds && storeIds.length > 0) {
+      filteredStoreIds = storeIds.filter(id => uniqueKeyStoreIds.includes(id));
+    } else {
+      filteredStoreIds = uniqueKeyStoreIds;
+    }
+  }
 
   const [dailyMetrics, storeDaily] = await Promise.all([
     prisma.overviewDailyMetrics.findMany({
       where: {
         businessDate: { gte: start, lte: end },
-        storeId: storeIds ? { in: storeIds } : undefined,
+        storeId: filteredStoreIds ? { in: filteredStoreIds } : undefined,
       },
+      include: { store: true },
     }),
     prisma.salesStoreDaily.findMany({
       where: {
         businessDate: { gte: start, lte: end },
-        storeId: storeIds ? { in: storeIds } : undefined,
+        storeId: filteredStoreIds ? { in: filteredStoreIds } : undefined,
       },
       include: { store: true },
     }),

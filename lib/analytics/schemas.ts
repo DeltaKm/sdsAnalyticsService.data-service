@@ -4,6 +4,7 @@ export const analyticsQuerySchema = z.object({
   from: z.string().datetime().optional(),
   to: z.string().datetime().optional(),
   stores: z.array(z.string()).optional(),
+  uniqueKey: z.string().optional(),
 });
 
 const tableColumnSchema = z.object({

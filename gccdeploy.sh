@@ -14,7 +14,7 @@ DETAILS_URL_DEFAULT="https://console.cloud.google.com/run/detail/$REGION/$SERVIC
 DETAILS_URL="${DEPLOY_DETAILS_URL:-$DETAILS_URL_DEFAULT}"
 
 # Carico variabili dal file .env
-DATABASE_URL_VALUE=$(grep "^DATABASE_URL=" .env | cut -d '=' -f2-)
+DATABASE_URL_VALUE=$(grep "^DATABASE_URL=" .env | cut -d '=' -f2- | sed 's/^"//;s/"$//')
 TELEGRAM_CHAT_ID=$(grep "^TELEGRAM_CHAT_ID=" .env | cut -d '=' -f2-)
 TELEGRAM_BOT_TOKEN=$(grep "^TELEGRAM_BOT_TOKEN=" .env | cut -d '=' -f2-)
 
@@ -84,7 +84,7 @@ echo "Cloud Build: build & push immagine..." | tee -a $LOGFILE
 
 gcloud builds submit \
   --config cloudbuild.yaml \
-  --substitutions=_IMAGE=$IMAGE \
+  --substitutions="_IMAGE=$IMAGE,_DATABASE_URL=$DATABASE_URL_VALUE" \
   . 2>&1 | tee -a $LOGFILE
 
 CLOUD_BUILD_EXIT=${pipestatus[1]:-0}

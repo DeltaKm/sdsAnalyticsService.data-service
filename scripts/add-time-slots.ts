@@ -5,7 +5,6 @@ const prisma = new PrismaClient();
 async function addTimeSlots() {
   const uniqueKey = 'instance1-50-75-77';
   
-  // Get our stores
   const stores = await prisma.store.findMany({
     where: { uniqueKey },
   });

@@ -59,6 +59,11 @@ async function createTestData() {
         avgTicket: Math.floor(Math.random() * 50) + 20,
         coversCount: Math.floor(Math.random() * 100) + 50,
         avgCover: Math.floor(Math.random() * 30) + 15,
+        timeSlotBreakdown: [{
+          hour: "12:00",
+          sales: Math.floor(Math.random() * 10) + 5,
+          covers: Math.floor(Math.random() * 20) + 10,
+        }],
       },
       create: {
         businessDate,
@@ -69,80 +74,113 @@ async function createTestData() {
         avgTicket: Math.floor(Math.random() * 50) + 20,
         coversCount: Math.floor(Math.random() * 100) + 50,
         avgCover: Math.floor(Math.random() * 30) + 15,
+        timeSlotBreakdown: [{
+          hour: "12:00",
+          sales: Math.floor(Math.random() * 10) + 5,
+          covers: Math.floor(Math.random() * 20) + 10,
+        }],
       },
     });
 
     // Create overview daily metrics for store 2
     await prisma.overviewDailyMetrics.upsert({
       where: {
-        businessDate_storeId: {
-          businessDate,
+        storeId_businessDate: {
           storeId: store2.id,
+          businessDate,
         },
       },
       update: {
-        totalSales: Math.floor(Math.random() * 800) + 400,
-        totalTransactions: Math.floor(Math.random() * 40) + 15,
-        averageTicket: Math.floor(Math.random() * 40) + 18,
-        totalCovers: Math.floor(Math.random() * 80) + 40,
-        averageCover: Math.floor(Math.random() * 25) + 12,
+        grossAmount: Math.floor(Math.random() * 800) + 400,
+        netAmount: Math.floor(Math.random() * 700) + 350,
+        salesCount: Math.floor(Math.random() * 40) + 15,
+        avgTicket: Math.floor(Math.random() * 40) + 18,
+        coversCount: Math.floor(Math.random() * 80) + 40,
+        avgCover: Math.floor(Math.random() * 25) + 12,
+        timeSlotBreakdown: [{
+          hour: "12:00",
+          sales: Math.floor(Math.random() * 10) + 5,
+          covers: Math.floor(Math.random() * 20) + 10,
+        }],
       },
       create: {
         businessDate,
         storeId: store2.id,
-        totalSales: Math.floor(Math.random() * 800) + 400,
-        totalTransactions: Math.floor(Math.random() * 40) + 15,
-        averageTicket: Math.floor(Math.random() * 40) + 18,
-        totalCovers: Math.floor(Math.random() * 80) + 40,
-        averageCover: Math.floor(Math.random() * 25) + 12,
+        grossAmount: Math.floor(Math.random() * 800) + 400,
+        netAmount: Math.floor(Math.random() * 700) + 350,
+        salesCount: Math.floor(Math.random() * 40) + 15,
+        avgTicket: Math.floor(Math.random() * 40) + 18,
+        coversCount: Math.floor(Math.random() * 80) + 40,
+        avgCover: Math.floor(Math.random() * 25) + 12,
+        timeSlotBreakdown: [{
+          hour: "12:00",
+          sales: Math.floor(Math.random() * 10) + 5,
+          covers: Math.floor(Math.random() * 20) + 10,
+        }],
       },
     });
 
     // Create sales store daily data
     await prisma.salesStoreDaily.upsert({
       where: {
-        businessDate_storeId_documentType: {
-          businessDate,
+        storeId_businessDate: {
           storeId: store.id,
-          documentType: 'Scontrino',
+          businessDate,
         },
       },
       update: {
-        totalSales: Math.floor(Math.random() * 800) + 400,
-        totalTransactions: Math.floor(Math.random() * 40) + 15,
-        averageTicket: Math.floor(Math.random() * 40) + 18,
+        grossAmount: Math.floor(Math.random() * 800) + 400,
+        salesCount: Math.floor(Math.random() * 40) + 15,
+        avgTicket: Math.floor(Math.random() * 40) + 18,
+        documentBreakdown: [{
+          documentType: "Scontrino",
+          grossAmount: Math.floor(Math.random() * 800) + 400,
+          salesCount: Math.floor(Math.random() * 40) + 15,
+        }],
       },
       create: {
         businessDate,
         storeId: store.id,
-        documentType: 'Scontrino',
-        totalSales: Math.floor(Math.random() * 800) + 400,
-        totalTransactions: Math.floor(Math.random() * 40) + 15,
-        averageTicket: Math.floor(Math.random() * 40) + 18,
+        grossAmount: Math.floor(Math.random() * 800) + 400,
+        salesCount: Math.floor(Math.random() * 40) + 15,
+        avgTicket: Math.floor(Math.random() * 40) + 18,
+        documentBreakdown: [{
+          documentType: "Scontrino",
+          grossAmount: Math.floor(Math.random() * 800) + 400,
+          salesCount: Math.floor(Math.random() * 40) + 15,
+        }],
       },
     });
 
     // Create sales store daily data for store 2
     await prisma.salesStoreDaily.upsert({
       where: {
-        businessDate_storeId_documentType: {
-          businessDate,
+        storeId_businessDate: {
           storeId: store2.id,
-          documentType: 'Fattura',
+          businessDate,
         },
       },
       update: {
-        totalSales: Math.floor(Math.random() * 600) + 300,
-        totalTransactions: Math.floor(Math.random() * 30) + 10,
-        averageTicket: Math.floor(Math.random() * 35) + 15,
+        grossAmount: Math.floor(Math.random() * 600) + 300,
+        salesCount: Math.floor(Math.random() * 30) + 10,
+        avgTicket: Math.floor(Math.random() * 35) + 15,
+        documentBreakdown: [{
+          documentType: "Fattura",
+          grossAmount: Math.floor(Math.random() * 600) + 300,
+          salesCount: Math.floor(Math.random() * 30) + 10,
+        }],
       },
       create: {
         businessDate,
         storeId: store2.id,
-        documentType: 'Fattura',
-        totalSales: Math.floor(Math.random() * 600) + 300,
-        totalTransactions: Math.floor(Math.random() * 30) + 10,
-        averageTicket: Math.floor(Math.random() * 35) + 15,
+        grossAmount: Math.floor(Math.random() * 600) + 300,
+        salesCount: Math.floor(Math.random() * 30) + 10,
+        avgTicket: Math.floor(Math.random() * 35) + 15,
+        documentBreakdown: [{
+          documentType: "Fattura",
+          grossAmount: Math.floor(Math.random() * 600) + 300,
+          salesCount: Math.floor(Math.random() * 30) + 10,
+        }],
       },
     });
   }

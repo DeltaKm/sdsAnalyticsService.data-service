@@ -7,11 +7,19 @@ export async function getOverviewAnalytics(query: AnalyticsQuery): Promise<Analy
   const storeIds = normalizeStores(query.stores);
   const { uniqueKey } = query;
 
-  // Filter by uniqueKey if provided
+  // Filter by uniqueKey if provided (supports hierarchical prefix matching)
   let filteredStoreIds = storeIds;
   if (uniqueKey) {
+    // Support hierarchical filtering:
+    // - "instance1-50-75-77" → exact match (single store)
+    // - "instance1-50-75" → all stores in company 75
+    // - "instance1-50" → all stores in group 50
     const stores = await prisma.store.findMany({
-      where: { uniqueKey },
+      where: {
+        uniqueKey: {
+          startsWith: uniqueKey,
+        },
+      },
       select: { id: true },
     });
     const uniqueKeyStoreIds = stores.map(s => s.id);
@@ -80,6 +88,8 @@ export async function getOverviewAnalytics(query: AnalyticsQuery): Promise<Analy
   const tableRows: AnalyticsResponse["table"]["rows"] = [];
   const tableColumns: AnalyticsResponse["table"]["columns"] = [
     { key: "store", label: "Punto Vendita", align: "left" },
+    { key: "azienda", label: "Azienda", align: "left" },
+    { key: "gruppo", label: "Gruppo", align: "left" },
     { key: "tipo_documento", label: "Tipo Documento", align: "left" },
     { key: "numero_vendite", label: "N. Vendite", align: "right" },
     { key: "venduto", label: "Venduto", align: "right" },
@@ -87,9 +97,14 @@ export async function getOverviewAnalytics(query: AnalyticsQuery): Promise<Analy
 
   for (const entry of storeDaily) {
     const storeName = entry.store?.name ?? entry.storeId;
+    const companyName = entry.store?.companyName ?? "-";
+    const corporateName = entry.store?.corporateName ?? "-";
+    
     for (const doc of entry.documentBreakdown ?? []) {
       tableRows.push({
         store: storeName,
+        azienda: companyName,
+        gruppo: corporateName,
         tipo_documento: doc.documentType,
         numero_vendite: doc.salesCount ?? 0,
         venduto: doc.grossAmount ?? 0,

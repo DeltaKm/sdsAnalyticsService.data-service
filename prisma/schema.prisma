@@ -23,6 +23,8 @@ model Store {
   code                   String                @unique
   name                   String
   uniqueKey              String?
+  companyName            String?
+  corporateName          String?
   timezone               String                @default("Europe/Rome")
   address                String?
   city                   String?

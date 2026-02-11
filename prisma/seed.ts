@@ -296,7 +296,7 @@ async function clearDatabase() {
 }
 
 async function seedCoreEntities() {
-  console.log("🏗️  Seeding base entities (stores, channels, menu items, operators)...");
+  console.log("Seeding base entities (stores, channels, menu items, operators)...");
 
   const stores = await Promise.all(
     storeSeeds.map((store) =>
@@ -417,11 +417,11 @@ async function generateSalesYear(options: {
     }
   }
 
-  console.log(`🧾 Generated ${saleDocuments.length.toLocaleString()} sales documents.`);
+  console.log(`Generated ${saleDocuments.length.toLocaleString()} sales documents.`);
 
   await chunkedCreateMany(prisma.sale, saleDocuments);
 
-  console.log("🗂️  Writing aggregate collections...");
+  console.log("Writing aggregate collections...");
 
   const overviewDailyData: Prisma.OverviewDailyMetricsCreateManyInput[] = [];
   const salesStoreData: Prisma.SalesStoreDailyCreateManyInput[] = [];
@@ -500,7 +500,7 @@ async function generateSalesYear(options: {
   await chunkedCreateMany(prisma.salesOperatorDaily, salesOperatorData);
   await chunkedCreateMany(prisma.catalogItemDaily, catalogDailyData);
 
-  console.log("📊 Generating overview rollups...");
+  console.log("Generating overview rollups...");
 
   const overviewRollups: Prisma.OverviewRollupCreateManyInput[] = [];
 
@@ -588,12 +588,12 @@ async function main() {
   const core = await seedCoreEntities();
   await generateSalesYear(core);
   console.timeEnd("seed");
-  console.log("✅ Seed completed successfully.");
+  console.log("Seed completed successfully.");
 }
 
 main()
   .catch((error) => {
-    console.error("❌ Seed failed", error);
+    console.error("Seed failed", error);
     process.exit(1);
   })
   .finally(async () => {

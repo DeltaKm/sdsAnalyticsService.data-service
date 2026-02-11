@@ -1,29 +1,26 @@
 ==== DEPLOY INIZIATO ====
-Data: Tue Feb 10 11:54:48 CET 2026
-Nuova versione: v1.0.9
+Data: Tue Feb 10 12:08:17 CET 2026
+Nuova versione: v1.0.10
 Cloud Build: build & push immagine...
-Creating temporary archive of 42 file(s) totalling 348.4 KiB before compression.
+Creating temporary archive of 42 file(s) totalling 348.5 KiB before compression.
 Some files were not included in the source upload.
 
-Check the gcloud log [/Users/claudiomartinez/.config/gcloud/logs/2026.02.10/11.54.50.399914.log] to see which files and the contents of the
+Check the gcloud log [/Users/claudiomartinez/.config/gcloud/logs/2026.02.10/12.08.17.918084.log] to see which files and the contents of the
 default gcloudignore file used (see `$ gcloud topic gcloudignore` to learn
 more).
 
-Uploading tarball of [.] to [gs://sdsanalyticsservice_cloudbuild/source/1770720890.515155-75072297f51a490d963caf91be6bdcd3.tgz]
-Created [https://cloudbuild.googleapis.com/v1/projects/sdsanalyticsservice/locations/global/builds/c30aeec8-1951-40d1-9aa0-262db46e2feb].
-Logs are available at [ https://console.cloud.google.com/cloud-build/builds/c30aeec8-1951-40d1-9aa0-262db46e2feb?project=542854471096 ].
+Uploading tarball of [.] to [gs://sdsanalyticsservice_cloudbuild/source/1770721698.023237-2a38bbbefb7749f5bda1df5c4a938a74.tgz]
+Created [https://cloudbuild.googleapis.com/v1/projects/sdsanalyticsservice/locations/global/builds/314072c5-a719-48cb-a8ed-dd6c80d31af1].
+Logs are available at [ https://console.cloud.google.com/cloud-build/builds/314072c5-a719-48cb-a8ed-dd6c80d31af1?project=542854471096 ].
 Waiting for build to complete. Polling interval: 1 second(s).
-
-BUILD FAILURE: Build step failure: build step 0 "gcr.io/cloud-builders/docker" failed: step exited with non-zero status: 1
-ERROR: (gcloud.builds.submit) build c30aeec8-1951-40d1-9aa0-262db46e2feb completed with status "FAILURE"
-------------------------------------- REMOTE BUILD OUTPUT -------------------------------------
-starting build "c30aeec8-1951-40d1-9aa0-262db46e2feb"
+---------------------------------------------------------- REMOTE BUILD OUTPUT -----------------------------------------------------------
+starting build "314072c5-a719-48cb-a8ed-dd6c80d31af1"
 
 FETCHSOURCE
-Fetching storage object: gs://sdsanalyticsservice_cloudbuild/source/1770720890.515155-75072297f51a490d963caf91be6bdcd3.tgz#1770720891404754
-Copying gs://sdsanalyticsservice_cloudbuild/source/1770720890.515155-75072297f51a490d963caf91be6bdcd3.tgz#1770720891404754...
-/ [0 files][    0.0 B/ 86.1 KiB]                                                / [1 files][ 86.1 KiB/ 86.1 KiB]                                                
-Operation completed over 1 objects/86.1 KiB.
+Fetching storage object: gs://sdsanalyticsservice_cloudbuild/source/1770721698.023237-2a38bbbefb7749f5bda1df5c4a938a74.tgz#1770721699046242
+Copying gs://sdsanalyticsservice_cloudbuild/source/1770721698.023237-2a38bbbefb7749f5bda1df5c4a938a74.tgz#1770721699046242...
+/ [0 files][    0.0 B/ 86.2 KiB]                                                / [1 files][ 86.2 KiB/ 86.2 KiB]                                                
+Operation completed over 1 objects/86.2 KiB.
 BUILD
 Starting Step #0
 Step #0: Already have image (with digest): gcr.io/cloud-builders/docker
@@ -34,10 +31,10 @@ Step #0: 589002ba0eae: Already exists
 Step #0: ad6d96c196e3: Pulling fs layer
 Step #0: eb87f4721c91: Pulling fs layer
 Step #0: e31b20165522: Pulling fs layer
-Step #0: eb87f4721c91: Verifying Checksum
-Step #0: eb87f4721c91: Download complete
 Step #0: e31b20165522: Verifying Checksum
 Step #0: e31b20165522: Download complete
+Step #0: eb87f4721c91: Verifying Checksum
+Step #0: eb87f4721c91: Download complete
 Step #0: ad6d96c196e3: Verifying Checksum
 Step #0: ad6d96c196e3: Download complete
 Step #0: ad6d96c196e3: Pull complete
@@ -47,32 +44,32 @@ Step #0: Digest: sha256:09e2b3d9726018aecf269bd35325f46bf75046a643a66d28360ec711
 Step #0: Status: Downloaded newer image for node:20-alpine
 Step #0:  ---> 458b0b7c1c60
 Step #0: Step 2/23 : ARG DATABASE_URL
-Step #0:  ---> Running in c6eee9863a48
-Step #0: Removing intermediate container c6eee9863a48
-Step #0:  ---> 9c2524d81f61
+Step #0:  ---> Running in 8feaebc85768
+Step #0: Removing intermediate container 8feaebc85768
+Step #0:  ---> c08e335c0003
 Step #0: Step 3/23 : ENV DATABASE_URL=${DATABASE_URL}
-Step #0:  ---> Running in 78bbccf3a32f
-Step #0: Removing intermediate container 78bbccf3a32f
-Step #0:  ---> 2030d6f302fd
+Step #0:  ---> Running in 3e6d11b41429
+Step #0: Removing intermediate container 3e6d11b41429
+Step #0:  ---> 36c245f58c52
 Step #0: Step 4/23 : WORKDIR /app
-Step #0:  ---> Running in f6588f22f7b7
-Step #0: Removing intermediate container f6588f22f7b7
-Step #0:  ---> cc508cc349a4
+Step #0:  ---> Running in 8140fdbe79e8
+Step #0: Removing intermediate container 8140fdbe79e8
+Step #0:  ---> 40d0d5ce91ec
 Step #0: Step 5/23 : RUN apk add --no-cache openssl
-Step #0:  ---> Running in 00a8a7f3d392
+Step #0:  ---> Running in d95242132dc4
 Step #0: (1/1) Installing openssl (3.5.5-r0)
 Step #0: Executing busybox-1.37.0-r30.trigger
 Step #0: OK: 11.7 MiB in 19 packages
-Step #0: Removing intermediate container 00a8a7f3d392
-Step #0:  ---> 189fc5152110
+Step #0: Removing intermediate container d95242132dc4
+Step #0:  ---> ba453e3610f8
 Step #0: Step 6/23 : COPY package*.json ./
-Step #0:  ---> c447d5f16295
+Step #0:  ---> 68c0594b1a9b
 Step #0: Step 7/23 : COPY prisma ./prisma
-Step #0:  ---> 50dcb95aa27b
+Step #0:  ---> dbefadd1e241
 Step #0: Step 8/23 : RUN npm install
-Step #0:  ---> Running in adf3193c63c6
+Step #0:  ---> Running in 492258c9b554
 Step #0: 
-Step #0: added 404 packages, and audited 405 packages in 35s
+Step #0: added 404 packages, and audited 405 packages in 33s
 Step #0: 
 Step #0: 152 packages are looking for funding
 Step #0:   run `npm fund` for details
@@ -88,17 +85,211 @@ Step #0: npm notice New major version of npm available! 10.8.2 -> 11.9.0
 Step #0: npm notice Changelog: https://github.com/npm/cli/releases/tag/v11.9.0
 Step #0: npm notice To update run: npm install -g npm@11.9.0
 Step #0: npm notice
-Step #0: [0mRemoving intermediate container adf3193c63c6
-Step #0:  ---> 1f3412c6e7b7
+Step #0: [0mRemoving intermediate container 492258c9b554
+Step #0:  ---> 053c265c8419
 Step #0: Step 9/23 : COPY . .
-Step #0:  ---> c66df2b25dd9
+Step #0:  ---> 0c25ab6783bf
 Step #0: Step 10/23 : RUN npx prisma generate
-Step #0:  ---> Running in 60828ab90767
-Step #0: [91mFailed to load config file "/app" as a TypeScript/JavaScript module. Error: PrismaConfigEnvError: Missing required environment variable: DATABASE_URL
-Step #0: The command '/bin/sh -c npx prisma generate' returned a non-zero code: 1
-Finished Step #0
-ERROR
-ERROR: build step 0 "gcr.io/cloud-builders/docker" failed: step exited with non-zero status: 1
+Step #0:  ---> Running in 857cae8c1af1
+Step #0: [91mwarn The configuration property `package.json#prisma` is deprecated and will be removed in Prisma 7. Please migrate to a Prisma config file (e.g., `prisma.config.ts`).
+Step #0: For more information, see: https://pris.ly/prisma-config
+Step #0: 
+Step #0: [0m[91mLoaded Prisma config from prisma.config.ts.
+Step #0: 
+Step #0: [0m[91mwarn The Prisma config file in prisma.config.ts overrides the deprecated `package.json#prisma` property in package.json.
+Step #0:   For more information, see: https://pris.ly/prisma-config
+Step #0: 
+Step #0: [0m[91mPrisma config detected, skipping environment variable loading.
+Step #0: [0mPrisma schema loaded from prisma/schema.prisma
+Step #0: [91m┌─────────────────────────────────────────────────────────┐
+Step #0: │  Update available 6.19.0 -> 7.3.0                       │
+Step #0: │                                                         │
+Step #0: │  This is a major update - please follow the guide at    │
+Step #0: │  https://pris.ly/d/major-version-upgrade                │
+Step #0: │                                                         │
+Step #0: │  Run the following to update                            │
+Step #0: │    npm i --save-dev prisma@latest                       │
+Step #0: │    npm i @prisma/client@latest                          │
+Step #0: └─────────────────────────────────────────────────────────┘
 Step #0: [0m
------------------------------------------------------------------------------------------------
-ERRORE: cloud build fallita
+Step #0: ✔ Generated Prisma Client (6.19.0) to ./app/generated/prisma in 498ms
+Step #0: 
+Step #0: Removing intermediate container 857cae8c1af1
+Step #0:  ---> 3e7d5e716558
+Step #0: Step 11/23 : RUN npm run build
+Step #0:  ---> Running in 35cba550fde6
+Step #0: 
+Step #0: > data-service@0.1.0 build
+Step #0: > next build
+Step #0: 
+Step #0: [91m[baseline-browser-mapping] The data in this module is over two months old.  To ensure accurate Baseline data, please update: `npm i baseline-browser-mapping@latest -D`
+Step #0: [0mAttention: Next.js now collects completely anonymous telemetry regarding usage.
+Step #0: This information is used to shape Next.js' roadmap and prioritize features.
+Step #0: You can learn more, including how to opt-out if you'd not like to participate in this anonymous program, by visiting the following URL:
+Step #0: https://nextjs.org/telemetry
+Step #0: 
+Step #0:    ▲ Next.js 16.0.1 (Turbopack)
+Step #0: 
+Step #0:    Creating an optimized production build ...
+Step #0: [91m[baseline-browser-mapping] The data in this module is over two months old.  To ensure accurate Baseline data, please update: `npm i baseline-browser-mapping@latest -D`
+Step #0: [0m ✓ Compiled successfully in 24.5s
+Step #0:    Running TypeScript ...
+Step #0:    Collecting page data ...
+Step #0: [91m[baseline-browser-mapping] The data in this module is over two months old.  To ensure accurate Baseline data, please update: `npm i baseline-browser-mapping@latest -D`
+Step #0: [0m   Generating static pages (0/7) ...
+Step #0: [91m[baseline-browser-mapping] The data in this module is over two months old.  To ensure accurate Baseline data, please update: `npm i baseline-browser-mapping@latest -D`
+Step #0: [0m   Generating static pages (1/7) 
+Step #0:    Generating static pages (3/7) 
+Step #0:    Generating static pages (5/7) 
+Step #0:  ✓ Generating static pages (7/7) in 945.1ms
+Step #0:    Finalizing page optimization ...
+Step #0: 
+Step #0: Route (app)
+Step #0: ┌ ○ /
+Step #0: ├ ○ /_not-found
+Step #0: ├ ƒ /api/analytics/sales/overview
+Step #0: ├ ƒ /api/generate-embed-token
+Step #0: └ ƒ /api/health
+Step #0: 
+Step #0: 
+Step #0: ○  (Static)   prerendered as static content
+Step #0: ƒ  (Dynamic)  server-rendered on demand
+Step #0:
+Step #0: Removing intermediate container 35cba550fde6
+Step #0:  ---> 2f7e5c329aa8
+Step #0: Step 12/23 : FROM node:20-alpine AS runner
+Step #0:  ---> 458b0b7c1c60
+Step #0: Step 13/23 : WORKDIR /app
+Step #0:  ---> Running in 2136be52709f
+Step #0: Removing intermediate container 2136be52709f
+Step #0:  ---> 8a5a29bf003b
+Step #0: Step 14/23 : ENV NODE_ENV=production
+Step #0:  ---> Running in 6ce413322ff6
+Step #0: Removing intermediate container 6ce413322ff6
+Step #0:  ---> df2ae905e100
+Step #0: Step 15/23 : ENV PORT=8080
+Step #0:  ---> Running in 0c21785d6c69
+Step #0: Removing intermediate container 0c21785d6c69
+Step #0:  ---> b0585dbd3206
+Step #0: Step 16/23 : COPY package*.json ./
+Step #0:  ---> 232391fe9824
+Step #0: Step 17/23 : RUN npm install --omit=dev
+Step #0:  ---> Running in da762ab3a470
+Step #0: 
+Step #0: added 63 packages, and audited 64 packages in 26s
+Step #0: 
+Step #0: 16 packages are looking for funding
+Step #0:   run `npm fund` for details
+Step #0: 
+Step #0: 1 critical severity vulnerability
+Step #0: 
+Step #0: To address all issues, run:
+Step #0:   npm audit fix --force
+Step #0: 
+Step #0: Run `npm audit` for details.
+Step #0: [91mnpm notice
+Step #0: npm notice New major version of npm available! 10.8.2 -> 11.9.0
+Step #0: npm notice Changelog: https://github.com/npm/cli/releases/tag/v11.9.0
+Step #0: npm notice To update run: npm install -g npm@11.9.0
+Step #0: npm notice
+Step #0: [0mRemoving intermediate container da762ab3a470
+Step #0:  ---> 8d672a3bc31e
+Step #0: Step 18/23 : COPY --from=builder /app/.next/standalone ./
+Step #0:  ---> 42bf503392db
+Step #0: Step 19/23 : COPY --from=builder /app/.next/static ./.next/static
+Step #0:  ---> 96f510ca9d8f
+Step #0: Step 20/23 : COPY --from=builder /app/public ./public
+Step #0:  ---> 2073c5d200e2
+Step #0: Step 21/23 : COPY --from=builder /app/prisma ./prisma
+Step #0:  ---> 8cba0767bf23
+Step #0: Step 22/23 : EXPOSE 8080
+Step #0:  ---> Running in 9a1bdec9757b
+Step #0: Removing intermediate container 9a1bdec9757b
+Step #0:  ---> 2d0984af18dd
+Step #0: Step 23/23 : CMD ["node", "server.js"]
+Step #0:  ---> Running in da9d44ba8419
+Step #0: Removing intermediate container da9d44ba8419
+Step #0:  ---> 1873bf7c2566
+Step #0: Successfully built 1873bf7c2566
+Step #0: Successfully tagged europe-west1-docker.pkg.dev/sdsanalyticsservice/data-service-repo/data-service:v1.0.10
+Finished Step #0
+Starting Step #1
+Step #1: Already have image (with digest): gcr.io/cloud-builders/docker
+Step #1: The push refers to repository [europe-west1-docker.pkg.dev/sdsanalyticsservice/data-service-repo/data-service]
+Step #1: f2dca1d3771e: Preparing
+Step #1: 8c2563cf497d: Preparing
+Step #1: 33a5b0ba611c: Preparing
+Step #1: d3874b249178: Preparing
+Step #1: 48c62db22b4f: Preparing
+Step #1: 2e00b094b18d: Preparing
+Step #1: c5cd623374d0: Preparing
+Step #1: 1dcaf7a5a25b: Preparing
+Step #1: 3bcb0b085764: Preparing
+Step #1: e881f55858a8: Preparing
+Step #1: 989e799e6349: Preparing
+Step #1: 989e799e6349: Waiting
+Step #1: 2e00b094b18d: Pushed
+Step #1: c5cd623374d0: Pushed
+Step #1: 8c2563cf497d: Pushed
+Step #1: f2dca1d3771e: Pushed
+Step #1: 33a5b0ba611c: Pushed
+Step #1: 1dcaf7a5a25b: Pushed
+Step #1: 3bcb0b085764: Pushed
+Step #1: 989e799e6349: Pushed
+Step #1: d3874b249178: Pushed
+Step #1: e881f55858a8: Pushed
+Step #1: 48c62db22b4f: Pushed
+Step #1: v1.0.10: digest: sha256:abfb0582670f87e6d22235bc4b9f8a1f5d36cef7e476332aee62889ad2b7abef size: 2625
+Finished Step #1
+PUSH
+Pushing europe-west1-docker.pkg.dev/sdsanalyticsservice/data-service-repo/data-service:v1.0.10
+The push refers to repository [europe-west1-docker.pkg.dev/sdsanalyticsservice/data-service-repo/data-service]
+f2dca1d3771e: Preparing
+8c2563cf497d: Preparing
+33a5b0ba611c: Preparing
+d3874b249178: Preparing
+48c62db22b4f: Preparing
+2e00b094b18d: Preparing
+c5cd623374d0: Preparing
+1dcaf7a5a25b: Preparing
+3bcb0b085764: Preparing
+e881f55858a8: Preparing
+989e799e6349: Preparing
+989e799e6349: Waiting
+e881f55858a8: Layer already exists
+48c62db22b4f: Layer already exists
+1dcaf7a5a25b: Layer already exists
+2e00b094b18d: Layer already exists
+c5cd623374d0: Layer already exists
+f2dca1d3771e: Layer already exists
+3bcb0b085764: Layer already exists
+8c2563cf497d: Layer already exists
+d3874b249178: Layer already exists
+33a5b0ba611c: Layer already exists
+989e799e6349: Layer already exists
+v1.0.10: digest: sha256:abfb0582670f87e6d22235bc4b9f8a1f5d36cef7e476332aee62889ad2b7abef size: 2625
+DONE
+------------------------------------------------------------------------------------------------------------------------------------------
+ID                                    CREATE_TIME                DURATION  SOURCE                                                                                             IMAGES                                                                                  STATUS
+314072c5-a719-48cb-a8ed-dd6c80d31af1  2026-02-10T11:08:19+00:00  4M5S      gs://sdsanalyticsservice_cloudbuild/source/1770721698.023237-2a38bbbefb7749f5bda1df5c4a938a74.tgz  europe-west1-docker.pkg.dev/sdsanalyticsservice/data-service-repo/data-service:v1.0.10  SUCCESS
+Old revision: data-service-00008-hmg
+Deploy Cloud Run...
+Deploying container to Cloud Run service [[1mdata-service[m] in project [[1msdsanalyticsservice[m] region [[1meurope-west1[m]
+Deploying...
+Setting IAM Policy...............done
+Creating Revision.................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................done
+Routing traffic.....done
+Done.
+Service [[1mdata-service[m] revision [[1mdata-service-00009-whr[m] has been deployed and is serving [1m100[m percent of traffic.
+Service URL: [1mhttps://data-service-542854471096.europe-west1.run.app[m
+Health check...
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0100    15    0    15    0     0     17      0 --:--:-- --:--:-- --:--:--    17100    15    0    15    0     0     17      0 --:--:-- --:--:-- --:--:--    17
+{"status":"ok"}[SUCCESS] Deploy data-service riuscito
+Ref: refs/heads/main
+Commit: 518623e - fix: cloud build prisma env inj
+Immagine: europe-west1-docker.pkg.dev/sdsanalyticsservice/data-service-repo/data-service:v1.0.10
+Durata: 5m47s
+Dettagli: https://console.cloud.google.com/run/detail/europe-west1/data-service?project=sdsanalyticsservice
+Fine deploy v1.0.10

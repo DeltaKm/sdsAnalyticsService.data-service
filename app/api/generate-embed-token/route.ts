@@ -24,7 +24,7 @@ export async function POST(request: Request) {
     return NextResponse.json({
       embedUrl,
       token,
-      expiresIn: 30 * 24 * 60 * 60, // 30 days
+      expiresIn: 30 * 24 * 60 * 60, // 30 d
     });
   } catch (error) {
     console.error("Failed to generate embed token:", error);

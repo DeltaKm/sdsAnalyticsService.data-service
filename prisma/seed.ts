@@ -200,7 +200,7 @@ function recordAggregates(args: {
   const { storeId, channelId, operatorId, businessDate, timeSlot, documentType, grossAmount, netAmount, covers, items } = args;
   const dateKey = businessDate.toISOString();
 
-  // Overview daily
+
   const overviewKey = `${storeId}|${dateKey}`;
   const overview = overviewMap.get(overviewKey) ?? {
     storeId,
@@ -221,7 +221,7 @@ function recordAggregates(args: {
   overview.timeSlots.set(timeSlot, slot);
   overviewMap.set(overviewKey, overview);
 
-  // Sales by store daily
+  
   const storeDaily = salesStoreMap.get(overviewKey) ?? {
     storeId,
     businessDate,
@@ -237,7 +237,7 @@ function recordAggregates(args: {
   storeDaily.documentBreakdown.set(documentType, doc);
   salesStoreMap.set(overviewKey, storeDaily);
 
-  // Sales by channel daily
+  
   const channelKey = `${channelId}|${dateKey}`;
   const channelDaily = channelDailyMap.get(channelKey) ?? {
     channelId,
@@ -249,7 +249,7 @@ function recordAggregates(args: {
   channelDaily.grossAmount += grossAmount;
   channelDailyMap.set(channelKey, channelDaily);
 
-  // Sales by operator daily
+
   if (operatorId) {
     const operatorKey = `${operatorId}|${dateKey}`;
     const operatorDaily = operatorDailyMap.get(operatorKey) ?? {
@@ -264,7 +264,7 @@ function recordAggregates(args: {
     operatorDailyMap.set(operatorKey, operatorDaily);
   }
 
-  // Catalog item daily
+
   for (const item of items) {
     const catalogKey = `${item.id}|${storeId}|${dateKey}`;
     const catalogDaily = catalogDailyMap.get(catalogKey) ?? {
@@ -540,7 +540,6 @@ async function generateSalesYear(options: {
       });
     }
 
-    // Lifetime rollup
     const gross = sorted.reduce((acc, record) => acc + record.grossAmount, 0);
     const net = sorted.reduce((acc, record) => acc + record.netAmount, 0);
     const sales = sorted.reduce((acc, record) => acc + record.salesCount, 0);

@@ -23,7 +23,7 @@ export async function signEmbedToken({
   uniqueKey,
   userId,
   permissions,
-  expiresInSeconds = 30 * 24 * 60 * 60, // 30 days
+  expiresInSeconds = 30 * 24 * 60 * 60, // 30 d
 }: {
   uniqueKey: string;
   userId?: string;

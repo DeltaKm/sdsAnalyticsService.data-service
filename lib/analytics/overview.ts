@@ -7,13 +7,9 @@ export async function getOverviewAnalytics(query: AnalyticsQuery): Promise<Analy
   const storeIds = normalizeStores(query.stores);
   const { uniqueKey } = query;
 
-  // Filter by uniqueKey if provided (supports hierarchical prefix matching)
+  
   let filteredStoreIds = storeIds;
   if (uniqueKey) {
-    // Support hierarchical filtering:
-    // - "instance1-50-75-77" → exact match (single store)
-    // - "instance1-50-75" → all stores in company 75
-    // - "instance1-50" → all stores in group 50
     const stores = await prisma.store.findMany({
       where: {
         uniqueKey: {
@@ -24,7 +20,6 @@ export async function getOverviewAnalytics(query: AnalyticsQuery): Promise<Analy
     });
     const uniqueKeyStoreIds = stores.map(s => s.id);
     
-    // Intersect with explicit storeIds if provided
     if (storeIds && storeIds.length > 0) {
       filteredStoreIds = storeIds.filter(id => uniqueKeyStoreIds.includes(id));
     } else {

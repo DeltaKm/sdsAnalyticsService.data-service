@@ -1,8 +1,4 @@
-#!/bin/zsh
 
-########################################
-# CONFIG
-########################################
 PROJECT_ID="sdsanalyticsservice"
 REGION="europe-west1"
 REPO="data-service-repo"
@@ -13,7 +9,7 @@ LOGFILE="./deploy.log"
 DETAILS_URL_DEFAULT="https://console.cloud.google.com/run/detail/$REGION/$SERVICE?project=$PROJECT_ID"
 DETAILS_URL="${DEPLOY_DETAILS_URL:-$DETAILS_URL_DEFAULT}"
 
-# Carico variabili dal file .env
+
 DATABASE_URL_VALUE=$(grep "^DATABASE_URL=" .env | cut -d '=' -f2- | sed 's/^"//;s/"$//')
 TELEGRAM_CHAT_ID=$(grep "^TELEGRAM_CHAT_ID=" .env | cut -d '=' -f2-)
 TELEGRAM_BOT_TOKEN=$(grep "^TELEGRAM_BOT_TOKEN=" .env | cut -d '=' -f2-)
@@ -41,9 +37,6 @@ echo "Data: $(date)" | tee -a $LOGFILE
 START_TIME=$(date +%s)
 
 
-########################################
-# VERSIONING
-########################################
 if [ ! -f "$VERSION_FILE" ]; then
   echo "1.0.0" > $VERSION_FILE
 fi
@@ -77,9 +70,6 @@ echo "Nuova versione: $TAG" | tee -a $LOGFILE
 IMAGE="europe-west1-docker.pkg.dev/$PROJECT_ID/$REPO/$SERVICE:$TAG"
 
 
-########################################
-# CLOUD BUILD (build + push)
-########################################
 echo "Cloud Build: build & push immagine..." | tee -a $LOGFILE
 
 gcloud builds submit \
@@ -99,18 +89,12 @@ if [ $CLOUD_BUILD_EXIT -ne 0 ]; then
 fi
 
 
-########################################
-# OLD REVISION
-########################################
 OLD_REVISION=$(gcloud run services describe $SERVICE \
   --region $REGION --format='value(status.latestReadyRevisionName)' 2>/dev/null)
 
 echo "Old revision: $OLD_REVISION" | tee -a $LOGFILE
 
 
-########################################
-# DEPLOY CLOUD RUN
-########################################
 echo "Deploy Cloud Run..." | tee -a $LOGFILE
 
 gcloud run deploy $SERVICE \
@@ -141,9 +125,6 @@ fi
 URL=$(gcloud run services describe $SERVICE --region $REGION --format='value(status.url)')
 
 
-########################################
-# HEALTH CHECK
-########################################
 echo "Health check..." | tee -a $LOGFILE
 
 sleep 3
@@ -168,9 +149,6 @@ if [ $HC_EXIT -ne 0 ]; then
 fi
 
 
-########################################
-# SUCCESS
-########################################
 END_TIME=$(date +%s)
 ELAPSED=$(( END_TIME - START_TIME ))
 DURATION=$(format_duration $ELAPSED)

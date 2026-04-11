@@ -14,9 +14,7 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-/// ------------
-/// Core domain
-/// ------------
+
 
 model Store {
   id                     String                @id @default(auto()) @map("_id") @db.ObjectId
@@ -117,9 +115,6 @@ type SaleItem {
   totalPrice Float
 }
 
-/// -------------------
-/// Aggregated datasets
-/// -------------------
 
 model OverviewDailyMetrics {
   id                String            @id @default(auto()) @map("_id") @db.ObjectId
